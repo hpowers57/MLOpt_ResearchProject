@@ -68,10 +68,10 @@ class LSTM(nn.Module):
         
         self.lstm = nn.LSTM(input_size, hidden_size[0], num_layers, batch_first=True)
         self.y1 = nn.Linear(hidden_size[0], hidden_size[1])
-        self.elu = nn.ELU()
-        self.dropout = nn.Dropout(p=0.6)
+        self.dropout1 = nn.Dropout(0.3)
         self.y2 = nn.Linear(hidden_size[1], hidden_size[2])
-        self.dropout = nn.Dropout()
+        self.elu = nn.ELU(alpha=0.5)
+        self.dropout2 = nn.Dropout(p=0.6)
         self.y3 = nn.Linear(hidden_size[2], output_size)
         
     def forward(self, x):
@@ -81,11 +81,11 @@ class LSTM(nn.Module):
         hiddenStates, _ = self.lstm(x, (h0, c0))
         
         lstm_out = self.y1(hiddenStates[:, -1, :])
-        lstm_out = self.elu(lstm_out)
+        lstm_out = self.dropout1(lstm_out)
 
         dense_out = self.y2(lstm_out)
         dense_out = self.elu(dense_out)
-        dense_out = self.dropout(dense_out)
+        dense_out = self.dropout2(dense_out)
 
         out = self.y3(dense_out)
         
@@ -93,10 +93,10 @@ class LSTM(nn.Module):
     
 
 input_size = 1
-hidden_size = [15, 50, 15]
+hidden_size = [8, 70, 20]
 output_size = 1
-lr = 0.05
-nepochs = 10
+lr = 0.075
+nepochs = 20
 
 model = LSTM(input_size=input_size, hidden_size=hidden_size, output_size=output_size)
 
