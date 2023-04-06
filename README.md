@@ -1,6 +1,10 @@
 # CSCI 6968 Research Project
 ## Models
-List file(s) where model(s) are implemented. Include a brief description of the architectures and (for models taken from papers) a reference for the paper it came from.
+All models are currently implemented in `models.py`. The current models include:
+- RNN
+- GRU
+
+All models are implemented with Torch.
 
 ## Data
 Either a folder with the pre-processed data or a file which collects and pre-processes the data. Include a brief description of the dataset(s) included.
