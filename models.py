@@ -69,6 +69,6 @@ class LSTM(nn.Module):
         dense_out = self.elu(dense_out)
         dense_out = self.dropout(dense_out)
 
-    out = self.y3(dense_out)
+        out = self.y3(dense_out)
 
-    return out
+        return out
