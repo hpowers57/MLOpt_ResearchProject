@@ -49,17 +49,17 @@ class LSTM(nn.Module):
         self.num_layers = num_layers
         
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
-        self.y1 = nn.Linear(hidden_size, output_size)
+        self.out = nn.Linear(hidden_size, output_size)
 
     def forward(self, x):
         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).requires_grad_()
         c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).requires_grad_()
         
-        hidden, _ = self.lstm(x, (h0.detach(), c0.detach()))
+        out, _ = self.lstm(x, (h0.detach(), c0.detach()))
         
-        lstm_out = self.y1(hidden[:, -1, :])
+        out = self.out(out[:, -1, :])
         
-        return lstm_out 
+        return out 
 
     
 # class stackedLSTM(nn.Module):
