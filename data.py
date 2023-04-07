@@ -1,5 +1,7 @@
 import yfinance as yf
 from sklearn.preprocessing import MinMaxScaler
+import numpy as np
+import torch
 
 def pull_data(ticker, start="2000-01-01", end="2020-01-01", scale=True):
   data = yf.download(ticker, "2000-01-01", "2020-01-01")
