@@ -1,6 +1,6 @@
-import numpy as np
 from torch import nn
 import torch
+
 
 class Martingale:
     # Martingale model as discussed in Elliot et al (2017)
@@ -12,6 +12,7 @@ class Martingale:
     
     def __call__(self, x):
         return x[:,-1]
+
 
 class RNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_size, nonlinearity="tanh"):
@@ -72,33 +73,34 @@ class LSTM(nn.Module):
         
         return out 
 
-    
-# class stackedLSTM(nn.Module):
-#     def __init__(self, input_size, hidden_size, output_size, num_layers=2):
-#         super(stackedLSTM, self).__init__()
-        
-#         self.hidden_size = hidden_size
-#         self.num_layers = num_layers
-        
-#         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
-#         self.y1 = nn.Linear(hidden_size, output_size)
-#         self.dropout1 = nn.Dropout(0.3)
-#         self.y2 = nn.Linear(hidden_size[1], hidden_size[2])
-#         self.elu = nn.ELU(alpha=0.5)
-#         self.dropout2 = nn.Dropout(p=0.6)
-#         self.y3 = nn.Linear(hidden_size[2], output_size)
 
-#     def forward(self, x):
-#         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).requires_grad_()
-#         c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).requires_grad_()
-        
-#         hidden, _ = self.lstm(x, (h0.detach(), c0.detach()))
-        
-#         lstm_out = self.y1(hidden[:, -1, :])
-#         lstm_out = self.dropout1(lstm_out)
+class stack(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, output_size):
+        super(stack, self).__init__()
 
-#         dense_out = self.y2(lstm_out)
-#         dense_out = self.elu(dense_out)
-#         dense_out = self.dropout2(dense_out)
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.gru = nn.GRU(input_size, hidden_size, num_layers, batch_first=True)
+
+        self.out = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).requires_grad_()
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).requires_grad_()
+
+        _, hn1 = self.gru(x, h0.detach())
+        _, hn2 = self.gru(x, hn1.detach())
+        _, hn3 = self.gru(x, hn2.detach())
+
+        _, (hn4, cn1) = self.lstm(x, (hn3.detach(), c0.detach()))
+        _, (hn5, _) = self.lstm(x, (hn4.detach(), cn1.detach()))
+
+        _, hn6 = self.gru(x, hn5.detach())
+        _, hn7 = self.gru(x, hn6.detach())
+        out, _ = self.gru(x, hn7.detach())
+
+        out = self.out(out[:, -1, :])
         
-#         return self.y3(dense_out)
+        return out
