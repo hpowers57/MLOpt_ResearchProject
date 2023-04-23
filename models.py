@@ -2,6 +2,17 @@ import numpy as np
 from torch import nn
 import torch
 
+class Martingale:
+    # Martingale model as discussed in Elliot et al (2017)
+    def __init__(self):
+        pass
+    
+    def eval(self):
+        pass
+    
+    def __call__(self, x):
+        return x[:,-1]
+
 class RNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_size, nonlinearity="tanh"):
         super(RNN, self).__init__()
