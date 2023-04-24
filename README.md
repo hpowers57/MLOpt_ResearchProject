@@ -18,6 +18,9 @@ Models are evaluated by their RMSE, R-squared, optimism ratio, and pessimism rat
 ## Experiments
 The models above are trained and evaluated in `experiments.ipynb`.
 
+## Report
+The `MLOpt_ProgressReport.pdf`, `MLOpt_FinalReport.pdf`, and `MLOpt_ProjectPresentation.pdf` files contain the progress report, final report, and presentation slides, respectively.
+
 ## References
 Aaron Elliot, Cheng Hsu, and Jennifer Slodoba. Time series prediction: Predicting stock price.
 *arXiv*, 2017.
