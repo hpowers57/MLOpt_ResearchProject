@@ -5,14 +5,15 @@ All models are currently implemented in `models.py`. The current models include:
 - RNN
 - GRU
 - LSTM
+- ls-GRU
 
 All RNN models are implemented with Torch.
 
 ## Data
-Data is collected from Yahoo Finance with `pull_data` in `data.py`. Currently, we use the prices for Apple from January 1, 2000 to January 1, 2020. The data is split into bins and training and testing sets with `make_train_test`.
+Data is collected from Yahoo Finance with `pull_data` in `data.py`. Currently, we use the prices for Apple (AAPL) from January 1, 2000 to January 1, 2017 for training and January 1, 2017 to January 1, 2020 for validation. The data is split into bins and training and validation sets with `make_train_test`. We then test the models on Wells Fargo (WFC), Tesla (TSLA), General Mills (GIS) and American Tower Corp (AMT).
 
 ## Evaluation Metrics
-Models are evaluated by their RMSE, R-squared, optimism ratio, and pessimism ratios. THe implementation for the optimism and pessimism ratios can be found in `evaluation_metrics.py`. The optimism and pessimism ratios are defined by Sethia & Raut (2018).
+Models are evaluated by their RMSE, R-squared, optimism ratio, and pessimism ratios. The implementation for the optimism and pessimism ratios can be found in `evaluation_metrics.py`. The optimism and pessimism ratios are defined by Sethia & Raut (2018).
 
 ## Experiments
 The models above are trained and evaluated in `experiments.ipynb`.
